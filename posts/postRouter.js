@@ -30,12 +30,20 @@ router.delete('/:id', validatePostId, (req, res) => {
 
 router.put('/:id', validatePostId, (req, res) => {
   const id = req.params.id;
-  const { text } = req.body;
+  const { text, user_id } = req.body;
   if(!text){
-    res.status(400).json({errorMessage: "Post requires a body"})
+    res.status(400).json({errorMessage: "Post requires text"})
+  }
+  if(!user_id){
+    res.status(400).json({errorMessage: "Post requires a user_id"})
   }
 
-  Posts.update(id, req.body)
+  const post = {
+    text: text,
+    user_id: user_id
+  }
+
+  Posts.update(id, post)
     .then(post => {
       if(post){
         res.status(200).json({message: "Post Updated"})
